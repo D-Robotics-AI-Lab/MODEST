@@ -389,9 +389,10 @@ class Trainer(object):
 
 
         with torch.no_grad():
+            image = image.to(self.device)
             output_depth, output_seg = self.model(image)
-            depth_visual = vis_depth(output_depth[-1][-1].squeeze(0).squeeze(0))
-            seg_visual = vis_seg(output_seg[-1][-1].squeeze(0), image.squeeze(0).permute(1, 2, 0), 'syntodd')
+            depth_visual = vis_depth(output_depth[-1][-1].cpu().squeeze(0).squeeze(0))
+            seg_visual = vis_seg(output_seg[-1][-1].cpu().squeeze(0), image.cpu().squeeze(0).permute(1, 2, 0), 'syntodd')
             depth_image = Image.fromarray(depth_visual)
             seg_image = Image.fromarray(seg_visual)
             depth_image.save('results/depth.png')
